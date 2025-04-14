@@ -1,3 +1,4 @@
+ID,name,generation,height,weight,baseExperience,isDefault,color,shape,habitat,isLegendary,image
 1,Bulbasaur,1,70,6.9,64,True,green,quadruped,grassland,False,https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png
 2,Ivysaur,1,100,13.0,142,True,green,quadruped,grassland,False,https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png
 3,Venusaur,1,200,100.0,263,True,green,quadruped,grassland,False,https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png
