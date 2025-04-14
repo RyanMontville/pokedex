@@ -1,0 +1,19 @@
+<div id="container">
+    <button (click)="onClose()"><span class="material-symbols-outlined">
+        close
+    </span></button>
+<img [src]="pokemon?.image" [alt]="pokemon?.name" class="pokeImage" />
+<div class="header">
+    <h2>{{pokemon?.ID}}: {{pokemon?.name}}</h2>
+    <p>Generation: {{pokemon?.generation}}</p>
+    <p>Height: {{pokemon?.height}}</p>
+    <p>Weight: {{pokemon?.weight}}</p>
+    <p>Habitat: {{pokemon?.habitat}}</p>
+</div>
+<div class="stats">
+    <p>Stats go here</p>
+</div>
+<div class="moves">
+    <p>moves go here</p>
+</div>
+</div>

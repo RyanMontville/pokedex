@@ -1,0 +1,45 @@
+#container {
+    display: grid;
+    grid-template-areas:
+    "pokeImage header"
+    "pokeImage stats"
+    "pokeImage moves";
+  grid-template-columns: 1fr 3fr;
+  gap: 5px;
+  position: relative;
+  height: 100%;
+}
+
+.header {
+    grid-area: header;
+}
+
+.header h2 {
+    font-size: 5em;
+}
+
+.pokeImage {
+    grid-area: pokeImage;
+    display: inline-block;
+    margin: auto 0;
+}
+.stats {
+    grid-area: stats;
+}
+
+.moves {
+    grid-area: moves;
+}
+
+button {
+    position: absolute; /* Position relative to the nearest positioned ancestor */
+  top: 5px;
+  right: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  line-height: 1;
+}

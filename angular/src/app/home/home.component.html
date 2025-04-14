@@ -1,1 +1,20 @@
-<p>home works!</p>
+<main>
+    @if(errorMessage) {
+    <p>{{errorMessage}}</p>
+    }
+    <div id="pokemonList">
+        @for (pokemon of pokemonList; track $index) {
+        <div class="pokemon" [style.backgroundColor]="pokemon.color" [style.color]="colorStyles('text', pokemon.color)"
+            (click)="showPokemonDetail(pokemon.name)">
+            <img [src]="pokemon.image" [alt]="pokemon.name" />
+            <p class="name">{{pokemon.ID}}: {{pokemon.name}}</p>
+        </div>
+        }
+    </div>
+</main>
+@if (shouldShowDetail) {
+<div id="popup-wrapper">
+    <app-pokemon-detail [pokemonName]="pokemonToShowDetail" (close)="resetPokemonDetails()" class="popup" />
+</div>
+
+}
