@@ -1,3 +1,10 @@
+nav {
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
 #pokemonList {
     display: flex;
     justify-content: center;
@@ -36,7 +43,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
 }
 .popup {
     z-index: 3;

@@ -30,6 +30,7 @@ export class PokemonService {
   private parseDetail(csvData: string): Pokemon[] {
     const lines = csvData.trim().split('\n');
     if (lines.length <= 1) {
+      console.log("can't find headers");
       return [];
     }
     const header = lines[0].split(',').map(h => h.trim());
@@ -50,6 +51,7 @@ export class PokemonService {
     for (let i = 1; i < lines.length; i++) {
       const values = lines[i].split(',');
       if (values.length === header.length) {
+        console.log(values[nameIndex]);
         const pokemon: Pokemon = {
           ID: +values[idIndex]?.trim() || 0,
           name: values[nameIndex]?.trim() || '',
@@ -69,6 +71,7 @@ export class PokemonService {
         console.warn(`Skipping row ${i + 1} due to incorrect number of columns.`);
       }
     }
+    console.log("loaded data from csv");
     return pokemonList;
   }
 

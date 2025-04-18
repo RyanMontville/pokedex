@@ -2,8 +2,19 @@
     @if(errorMessage) {
     <p>{{errorMessage}}</p>
     }
+    <nav>
+        @if (currentStart > 0) {
+            <button (click)="previousPage()">Previous</button>
+        }
+        @for (page of pages; track $index) {
+            <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
+        }
+        @if (currentEnd < 1400) {
+            <button (click)="nextPage()">Next</button>
+        }
+       </nav>
     <div id="pokemonList">
-        @for (pokemon of pokemonList; track $index) {
+        @for (pokemon of currentPokemon; track $index) {
         <div class="pokemon" [style.backgroundColor]="pokemon.color" [style.color]="colorStyles('text', pokemon.color)"
             (click)="showPokemonDetail(pokemon.name)">
             <img [src]="pokemon.image" [alt]="pokemon.name" />
@@ -11,10 +22,22 @@
         </div>
         }
     </div>
+    <nav>
+        @if (currentStart > 0) {
+            <button (click)="previousPage()">Previous</button>
+        }
+        @for (page of pages; track $index) {
+            <button (click)="goToPage(page)">{{page}}</button>
+        }
+        @if (currentEnd < 1400) {
+            <button (click)="nextPage()">Next</button>
+        }
+       </nav>
+    
 </main>
 @if (shouldShowDetail) {
 <div id="popup-wrapper">
-    <app-pokemon-detail [pokemonName]="pokemonToShowDetail" (close)="resetPokemonDetails()" class="popup" />
+    <app-pokemon-detail [pokemonName]="pokemonToShowDetail" (close)="resetPokemonDetails()" class="popup" [@cardAnimation]="pokemonDetailState"/>
 </div>
 
 }

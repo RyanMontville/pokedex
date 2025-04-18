@@ -1,13 +1,8 @@
 #container {
     display: grid;
-    grid-template-areas:
-    "pokeImage header"
-    "pokeImage stats"
-    "pokeImage moves";
-  grid-template-columns: 1fr 3fr;
-  gap: 5px;
-  position: relative;
-  height: 100%;
+    gap: 5px;
+    position: relative;
+    height: 100%;
 }
 
 .header {
@@ -33,13 +28,41 @@
 
 button {
     position: absolute; /* Position relative to the nearest positioned ancestor */
-  top: 5px;
-  right: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  background-color: transparent;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1em;
-  line-height: 1;
+    top: 5px;
+    right: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    line-height: 1;
+}
+@media only screen and (min-width: 671px) {
+    #container {
+        grid-template-areas:
+        "pokeImage header"
+        "pokeImage stats"
+        "pokeImage moves";
+    grid-template-columns: 1fr 3fr;
+    }
+}
+
+@media only screen and (max-width: 670px) {
+    #container {
+        grid-template-areas:
+            "pokeImage"
+            "header"
+            "stats"
+            "moves";
+        grid-template-columns: 1fr;
+    }
+
+    .header h2 {
+        font-size: 3em;
+    }
+
+    .pokeImage {
+        width: 90%;
+    }
 }
