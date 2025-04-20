@@ -17,7 +17,7 @@ export class Pokemon {
 
 export class PokemonType {
     constructor(
-        public ID: number,
+        public pokemonID: number,
         public type: string
     ) {}
 }

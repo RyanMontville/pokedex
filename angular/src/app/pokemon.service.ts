@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
-import { Pokemon } from './pokemon.model';
+import { Pokemon, PokemonType } from './pokemon.model';
 
 export interface PokemonSimple {
     ID: number;
@@ -15,19 +15,29 @@ export interface PokemonSimple {
 })
 export class PokemonService {
   private pokemonDataCache: Pokemon[] | null = null;
+  private pokemonTypesCache: PokemonType[] | null = null;
   pokemonCSV: string = "https://raw.githubusercontent.com/RyanMontville/pokedex/refs/heads/main/data/pokemon.csv";
+  typeCSV: string = "https://raw.githubusercontent.com/RyanMontville/pokedex/refs/heads/main/data/pokemon_types.csv";
 
   constructor(private http: HttpClient) { }
 
   private getPokemonDataFromCsv(filePath: string): Observable<Pokemon[]> {
     return this.http.get(filePath, { responseType: 'text' })
       .pipe(
-        map(csvData => this.parseDetail(csvData)),
-        tap(data => this.pokemonDataCache = data) // Cache the data when fetched
+        map(csvData => this.parsePokemonDetail(csvData)),
+        tap(data => this.pokemonDataCache = data)
       );
   }
 
-  private parseDetail(csvData: string): Pokemon[] {
+  private getTypeDataFromCsv(filePath: string): Observable<PokemonType[]> {
+    return this.http.get(filePath, { responseType: 'text' })
+      .pipe(
+        map(csvData => this.parseType(csvData)),
+        tap(data => this.pokemonTypesCache = data)
+      )
+  }
+
+  private parsePokemonDetail(csvData: string): Pokemon[] {
     const lines = csvData.trim().split('\n');
     if (lines.length <= 1) {
       console.log("can't find headers");
@@ -75,6 +85,15 @@ export class PokemonService {
     return pokemonList;
   }
 
+  parseType(csvData: string): PokemonType[] {
+    const lines = csvData.trim().split('\n');
+    if (lines.length <= 1) {
+      console.log("can't find headers");
+      return [];
+    }
+    //pokemon_id,type_name
+  }
+
   getPokemonByName(name: string): Observable<Pokemon | undefined> {
     if (this.pokemonDataCache) {
       return new Observable(observer => {
@@ -98,4 +117,17 @@ export class PokemonService {
       return this.getPokemonDataFromCsv(this.pokemonCSV);
     }
   }
+
+  getAllPokemonTypes(): Observable<PokemonType[]> {
+    if (this.pokemonTypesCache) {
+      return new Observable(observer => {
+        observer.next(this.pokemonTypesCache!);
+        observer.complete();
+      });
+    } else {
+      return this.getTypeDataFromCsv(this.typeCSV);
+    }
+  }
+
+  
 }
