@@ -14,3 +14,10 @@ export class Pokemon {
         public image: string
     ) {}
 }
+
+export class PokemonType {
+    constructor(
+        public ID: number,
+        public type: string
+    ) {}
+}
