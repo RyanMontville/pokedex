@@ -2,10 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Pokemon } from '../pokemon.model';
 import { PokemonService } from '../pokemon.service';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { TypesComponent } from "../types/types.component";
 
 @Component({
   selector: 'app-pokemon-detail',
-  imports: [],
+  imports: [TypesComponent],
   templateUrl: './pokemon-detail.component.html',
   styleUrl: './pokemon-detail.component.css',
   animations: [
@@ -25,6 +26,7 @@ export class PokemonDetailComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   pokemon: Pokemon | undefined = undefined;
   errorMessage: string | null = null;
+  pokeID: number = 0;
 
   constructor(private pokemonService: PokemonService) {}
 
@@ -40,6 +42,7 @@ export class PokemonDetailComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.pokemon = data;
+          if (data) this.pokeID = data?.ID;
         },
         error: (error) => {
           this.errorMessage = 'Error loading pokemon data: ' + error;

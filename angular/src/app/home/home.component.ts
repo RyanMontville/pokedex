@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { PokemonDetailComponent } from "../pokemon-detail/pokemon-detail.component";
 import { Pokemon } from '../pokemon.model';
 import { trigger, state, style, transition, animate, useAnimation } from '@angular/animations';
-import { fadeInUpAnimation, fadeOutUpAnimation } from '../animations.service';
 
 @Component({
   selector: 'app-home',

@@ -1,1 +1,4 @@
-<p>types works!</p>
+@for (type of types; track $index) {
+    <img [src]="getIcon(type.type)" [alt]="type.type"/>
+}
+

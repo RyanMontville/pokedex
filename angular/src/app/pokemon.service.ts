@@ -61,7 +61,6 @@ export class PokemonService {
     for (let i = 1; i < lines.length; i++) {
       const values = lines[i].split(',');
       if (values.length === header.length) {
-        console.log(values[nameIndex]);
         const pokemon: Pokemon = {
           ID: +values[idIndex]?.trim() || 0,
           name: values[nameIndex]?.trim() || '',
@@ -91,7 +90,25 @@ export class PokemonService {
       console.log("can't find headers");
       return [];
     }
-    //pokemon_id,type_name
+    const header = lines[0].split(',').map(h => h.trim());
+    const idIndex = header.indexOf('pokemon_id');
+    const typeIndex = header.indexOf('type_name');
+
+    const typeList: PokemonType[] = [];
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(',');
+      if (values.length === header.length) {
+        const type: PokemonType = {
+          pokemonID: +values[idIndex]?.trim() || 0,
+          type: values[typeIndex]?.trim() || '',
+        }
+        typeList.push(type);
+      } else {
+        console.warn(`Skipping row ${i + 1} due to incorrect number of columns.`);
+      }
+    }
+    console.log("loaded data from csv");
+    return typeList;
   }
 
   getPokemonByName(name: string): Observable<Pokemon | undefined> {
@@ -103,6 +120,18 @@ export class PokemonService {
     } else {
       return this.getPokemonDataFromCsv(this.pokemonCSV).pipe(
         map(pokemonList => pokemonList.find(pokemon => pokemon.name.toLowerCase() === name.toLowerCase()))
+      );
+    }
+  }
+
+  getTypesForPokemonID(ID: number): Observable<PokemonType[] | undefined> {
+    if (this.pokemonTypesCache) {
+      return new Observable(observer => {
+        observer.next(this.pokemonTypesCache?.filter(pokemon => pokemon.pokemonID === ID))
+      });
+    } else {
+      return this.getTypeDataFromCsv(this.typeCSV).pipe(
+        map(typeList => typeList.filter(pokemon => pokemon.pokemonID === ID))
       );
     }
   }
