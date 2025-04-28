@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { PokemonService } from '../pokemon.service';
+import { PokemonService } from './pokemon.service';
 import { Router } from '@angular/router';
-import { PokemonDetailComponent } from "../pokemon-detail/pokemon-detail.component";
+import { PokemonDetailComponent } from "./pokemon-detail/pokemon-detail.component";
 import { Pokemon } from '../pokemon.model';
 import { trigger, state, style, transition, animate, useAnimation } from '@angular/animations';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  imports: [PokemonDetailComponent],
+  imports: [PokemonDetailComponent, FormsModule, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   animations: [
@@ -28,6 +30,8 @@ import { trigger, state, style, transition, animate, useAnimation } from '@angul
 
 export class HomeComponent implements OnInit {
   pokemonList: Pokemon[] = [];
+  filteredPokemonList: Pokemon[] = [];
+  showFiltered: boolean = false;
   currentStart: number = 0;
   currentEnd: number = 100;
   currentPokemon: Pokemon[] = [];
@@ -37,6 +41,7 @@ export class HomeComponent implements OnInit {
   pokemonToShowDetail: string = "";
   pages: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   currentPage: number = 1;
+  searchTerm: string = "";
 
   constructor(
     private pokemonService: PokemonService,
@@ -118,6 +123,29 @@ export class HomeComponent implements OnInit {
     this.currentStart = start;
     this.currentEnd = end
     this.currentPokemon = this.pokemonList.slice(this.currentStart, this.currentEnd);
+  }
+
+  filterResults(text: string) {
+    this.errorMessage = "";
+    if (!text) {
+      this.errorMessage = "Please enter a pokemon to search"
+      setTimeout(() => {
+        this.errorMessage = "";
+      }, 1000);
+    }
+    this.filteredPokemonList = this.pokemonList.filter((pokemon) => pokemon.name.toLowerCase().includes(text.toLowerCase()));
+    if (this.filteredPokemonList.length === 0) {
+      this.errorMessage = `No Pokemon matching '${text}'`;
+      this.showFiltered = false;
+      this.searchTerm = "";
+    } else {
+      this.showFiltered = true;
+    }
+  }
+  clear() {
+    this.showFiltered = false;
+    this.searchTerm = "";
+    this.filteredPokemonList = [];
   }
 
 }

@@ -1,18 +1,27 @@
 <main>
+    <div class="searchBar">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." #searchBar />
+        <button type="button" (click)="filterResults(searchBar.value)">Search</button>
+        @if (showFiltered) {
+            <button (click)="clear()">Clear Search Resuts</button>
+        }
+    </div>
     @if(errorMessage) {
-    <p>{{errorMessage}}</p>
+    <div class="errorMessage" (click)="errorMessage = ''"><span class="material-symbols-outlined">
+            error
+        </span>{{errorMessage}}</div>
     }
+    @if (!showFiltered) {
     <nav>
         @if (currentStart > 0) {
-            <button (click)="previousPage()">Previous</button>
+        <button (click)="previousPage()">Previous</button>
         }
         @for (page of pages; track $index) {
-            <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
+        <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
         }
-        @if (currentEnd < 1400) {
-            <button (click)="nextPage()">Next</button>
-        }
-       </nav>
+        @if (currentEnd < 1400) { <button (click)="nextPage()">Next</button>
+            }
+    </nav>
     <div id="pokemonList">
         @for (pokemon of currentPokemon; track $index) {
         <div class="pokemon" [style.backgroundColor]="pokemon.color" [style.color]="colorStyles('text', pokemon.color)"
@@ -24,20 +33,32 @@
     </div>
     <nav>
         @if (currentStart > 0) {
-            <button (click)="previousPage()">Previous</button>
+        <button (click)="previousPage()">Previous</button>
         }
         @for (page of pages; track $index) {
-            <button (click)="goToPage(page)">{{page}}</button>
+        <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
         }
-        @if (currentEnd < 1400) {
-            <button (click)="nextPage()">Next</button>
+        @if (currentEnd < 1400) { <button (click)="nextPage()">Next</button>
+            }
+    </nav>
+    }
+    @if (showFiltered) {
+    <div id="pokemonList">
+        @for (pokemon of filteredPokemonList; track $index) {
+        <div class="pokemon" [style.backgroundColor]="pokemon.color" [style.color]="colorStyles('text', pokemon.color)"
+            (click)="showPokemonDetail(pokemon.name)">
+            <img [src]="pokemon.image" [alt]="pokemon.name" />
+            <p class="name">{{pokemon.ID}}: {{pokemon.name}}</p>
+        </div>
         }
-       </nav>
-    
+    </div>
+    }
+
 </main>
 @if (shouldShowDetail) {
 <div id="popup-wrapper">
-    <app-pokemon-detail [pokemonName]="pokemonToShowDetail" (close)="resetPokemonDetails()" class="popup" [@cardAnimation]="pokemonDetailState"/>
+    <app-pokemon-detail [pokemonName]="pokemonToShowDetail" (close)="resetPokemonDetails()" class="popup"
+        [@cardAnimation]="pokemonDetailState" />
 </div>
 
 }

@@ -1,12 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Pokemon } from '../pokemon.model';
+import { Pokemon } from '../../pokemon.model';
 import { PokemonService } from '../pokemon.service';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { TypesComponent } from "../types/types.component";
+import { TypesComponent } from "../../types/types.component";
+import { AbilitiesComponent } from "../../abilities/abilities.component";
+import { StatsComponent } from "../../stats/stats.component";
+import { MovesComponent } from "../../moves/moves.component";
 
 @Component({
   selector: 'app-pokemon-detail',
-  imports: [TypesComponent],
+  imports: [TypesComponent, AbilitiesComponent, StatsComponent, MovesComponent],
   templateUrl: './pokemon-detail.component.html',
   styleUrl: './pokemon-detail.component.css',
   animations: [
@@ -27,6 +30,7 @@ export class PokemonDetailComponent implements OnInit {
   pokemon: Pokemon | undefined = undefined;
   errorMessage: string | null = null;
   pokeID: number = 0;
+  pokeColor: string = "grey";
 
   constructor(private pokemonService: PokemonService) {}
 
@@ -42,7 +46,10 @@ export class PokemonDetailComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.pokemon = data;
-          if (data) this.pokeID = data?.ID;
+          if (data) {
+            this.pokeID = data?.ID;
+            this.pokeColor = data.color;
+          } 
         },
         error: (error) => {
           this.errorMessage = 'Error loading pokemon data: ' + error;
@@ -54,6 +61,26 @@ export class PokemonDetailComponent implements OnInit {
   onClose() {
     this.close.emit();
     this.pokemon = undefined;
+  }
+
+  colorStyles(style: string, color: string) {
+    if (style == 'text') {
+      switch (color) {
+        case "black": return "white";
+        case "blue": return "white";
+        case "brown": return "White";
+        case "gray": return "white";
+        case "green": return "white";
+        case "pink": return "black";
+        case "purple": return "white";
+        case "red": return "white";
+        case "white": return "black";
+        case "yellow": return "black";
+        default: return "white";
+      }
+    } else {
+      return "green";
+    }
   }
   
 }

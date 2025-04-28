@@ -1,0 +1,23 @@
+<div id="container">
+    <button (click)="onClose()"><span class="material-symbols-outlined">
+            close
+        </span></button>
+    <img [src]="pokemon?.image" [alt]="pokemon?.name" class="pokeImage" />
+    <div class="header">
+        <div class="name-type">
+            <h2>{{pokemon?.ID}}: {{pokemon?.name}}</h2>
+            <app-types [pokemonID]="pokeID" />
+        </div>
+    </div>
+    <div class="info" [style.backgroundColor]="pokeColor" [style.color]="colorStyles('text', pokeColor)">
+        <p>Generation: {{pokemon?.generation}}</p>
+        <p>Height: {{pokemon?.height}} cm</p>
+        <p>Weight: {{pokemon?.weight}} kg</p>
+        <p>Habitat: {{pokemon?.habitat}}</p>
+        <app-stats [pokemonID]="pokeID" />
+        <app-abilities [pokemonID]="pokeID" />
+    </div>
+    <div class="moves">
+        <app-moves [pokemonID]="pokeID" />
+    </div>
+</div>

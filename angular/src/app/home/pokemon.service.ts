@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
-import { Pokemon, PokemonType } from './pokemon.model';
+import { Pokemon } from '../pokemon.model';
 
 export interface PokemonSimple {
     ID: number;
@@ -15,9 +15,9 @@ export interface PokemonSimple {
 })
 export class PokemonService {
   private pokemonDataCache: Pokemon[] | null = null;
-  private pokemonTypesCache: PokemonType[] | null = null;
-  pokemonCSV: string = "https://raw.githubusercontent.com/RyanMontville/pokedex/refs/heads/main/data/pokemon.csv";
-  typeCSV: string = "https://raw.githubusercontent.com/RyanMontville/pokedex/refs/heads/main/data/pokemon_types.csv";
+  private pokemonCSV: string = "https://raw.githubusercontent.com/RyanMontville/pokedex/refs/heads/main/data/pokemon.csv";
+
+  private movesCSV: string = "https://raw.githubusercontent.com/RyanMontville/pokedex/refs/heads/main/data/pokemon_moves.csv";
 
   constructor(private http: HttpClient) { }
 
@@ -27,14 +27,6 @@ export class PokemonService {
         map(csvData => this.parsePokemonDetail(csvData)),
         tap(data => this.pokemonDataCache = data)
       );
-  }
-
-  private getTypeDataFromCsv(filePath: string): Observable<PokemonType[]> {
-    return this.http.get(filePath, { responseType: 'text' })
-      .pipe(
-        map(csvData => this.parseType(csvData)),
-        tap(data => this.pokemonTypesCache = data)
-      )
   }
 
   private parsePokemonDetail(csvData: string): Pokemon[] {
@@ -84,33 +76,6 @@ export class PokemonService {
     return pokemonList;
   }
 
-  parseType(csvData: string): PokemonType[] {
-    const lines = csvData.trim().split('\n');
-    if (lines.length <= 1) {
-      console.log("can't find headers");
-      return [];
-    }
-    const header = lines[0].split(',').map(h => h.trim());
-    const idIndex = header.indexOf('pokemon_id');
-    const typeIndex = header.indexOf('type_name');
-
-    const typeList: PokemonType[] = [];
-    for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(',');
-      if (values.length === header.length) {
-        const type: PokemonType = {
-          pokemonID: +values[idIndex]?.trim() || 0,
-          type: values[typeIndex]?.trim() || '',
-        }
-        typeList.push(type);
-      } else {
-        console.warn(`Skipping row ${i + 1} due to incorrect number of columns.`);
-      }
-    }
-    console.log("loaded data from csv");
-    return typeList;
-  }
-
   getPokemonByName(name: string): Observable<Pokemon | undefined> {
     if (this.pokemonDataCache) {
       return new Observable(observer => {
@@ -120,18 +85,6 @@ export class PokemonService {
     } else {
       return this.getPokemonDataFromCsv(this.pokemonCSV).pipe(
         map(pokemonList => pokemonList.find(pokemon => pokemon.name.toLowerCase() === name.toLowerCase()))
-      );
-    }
-  }
-
-  getTypesForPokemonID(ID: number): Observable<PokemonType[] | undefined> {
-    if (this.pokemonTypesCache) {
-      return new Observable(observer => {
-        observer.next(this.pokemonTypesCache?.filter(pokemon => pokemon.pokemonID === ID))
-      });
-    } else {
-      return this.getTypeDataFromCsv(this.typeCSV).pipe(
-        map(typeList => typeList.filter(pokemon => pokemon.pokemonID === ID))
       );
     }
   }
@@ -146,17 +99,4 @@ export class PokemonService {
       return this.getPokemonDataFromCsv(this.pokemonCSV);
     }
   }
-
-  getAllPokemonTypes(): Observable<PokemonType[]> {
-    if (this.pokemonTypesCache) {
-      return new Observable(observer => {
-        observer.next(this.pokemonTypesCache!);
-        observer.complete();
-      });
-    } else {
-      return this.getTypeDataFromCsv(this.typeCSV);
-    }
-  }
-
-  
 }

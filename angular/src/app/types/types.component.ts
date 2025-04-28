@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PokemonService } from '../pokemon.service';
 import { PokemonType } from '../pokemon.model';
+import { TypesService } from './types.service';
 
 @Component({
   selector: 'app-types',
@@ -12,10 +12,10 @@ export class TypesComponent implements OnInit {
   @Input() pokemonID!: number;
   types: PokemonType[] | undefined = [];
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(private typeService: TypesService) {}
 
   ngOnInit(): void {
-    this.pokemonService.getTypesForPokemonID(this.pokemonID).subscribe({
+    this.typeService.getTypesForPokemonID(this.pokemonID).subscribe({
       next: (data) => {
         this.types = data;
       },

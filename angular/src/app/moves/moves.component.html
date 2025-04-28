@@ -1,0 +1,6 @@
+<h2>Moves</h2>
+<div class="movesList">
+    @for (move of moves; track $index) {
+        <span><strong>{{move.moveName}}</strong> - power: {{move.power}}, accuracy: {{move.accuracy}}</span>
+    }
+</div>

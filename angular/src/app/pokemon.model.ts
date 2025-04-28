@@ -21,3 +21,31 @@ export class PokemonType {
         public type: string
     ) {}
 }
+
+export class Ability {
+    constructor(
+        public pokemonID: number,
+        public ability: string,
+        public isHidden: boolean
+    ) {}
+}
+
+export class Stat {
+    constructor(
+        public pokemonID: number,
+        public statName: string,
+        public baseStat: number,
+        public effort: number,
+        public isBattleOnly: boolean
+    ) {}
+}
+
+export class Move {
+    constructor(
+        public pokemonID: number,
+        public moveName: string,
+        public type: string,
+        public power: number,
+        public accuracy: number
+    ) {}
+}
