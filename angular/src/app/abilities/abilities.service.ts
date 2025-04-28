@@ -45,7 +45,7 @@ export class AbilitiesService {
         console.warn(`Skipping row ${i + 1} due to incorrect number of columns.`);
       }
     }
-    console.log("loaded data from csv");
+    console.log("loaded abilities data from csv");
     return abilityList;
   }
 

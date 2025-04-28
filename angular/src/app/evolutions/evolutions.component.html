@@ -1,0 +1,12 @@
+@if (hasThirdEvolution) {
+    @for (evolution of evolutions; track $index) {
+        <p>{{evolution.first}} > {{evolution.second}} > {{evolution.third}}</p>
+    }
+}
+
+@if (!hasThirdEvolution) {
+    @for (evolution of evolutions; track $index) {
+        <p>{{evolution.first}} > {{evolution.second}}</p>
+    }
+}
+<p>Evolutions</p>

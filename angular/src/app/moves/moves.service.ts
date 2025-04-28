@@ -49,7 +49,7 @@ export class MovesService {
         console.warn(`Skipping row ${i + 1} due to incorrect number of columns.`);
       }
     }
-    console.log("loaded data from csv");
+    console.log("loaded moves data from csv");
     return movesList;
   }
 

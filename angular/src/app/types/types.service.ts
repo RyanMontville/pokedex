@@ -43,7 +43,7 @@ export class TypesService {
         console.warn(`Skipping row ${i + 1} due to incorrect number of columns.`);
       }
     }
-    console.log("loaded data from csv");
+    console.log("loaded types data from csv");
     return typeList;
   }
 

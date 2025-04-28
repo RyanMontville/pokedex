@@ -72,7 +72,7 @@ export class PokemonService {
         console.warn(`Skipping row ${i + 1} due to incorrect number of columns.`);
       }
     }
-    console.log("loaded data from csv");
+    console.log("loaded pokemon data from csv");
     return pokemonList;
   }
 

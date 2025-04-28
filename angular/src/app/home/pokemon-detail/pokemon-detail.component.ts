@@ -6,10 +6,11 @@ import { TypesComponent } from "../../types/types.component";
 import { AbilitiesComponent } from "../../abilities/abilities.component";
 import { StatsComponent } from "../../stats/stats.component";
 import { MovesComponent } from "../../moves/moves.component";
+import { EvolutionsComponent } from "../../evolutions/evolutions.component";
 
 @Component({
   selector: 'app-pokemon-detail',
-  imports: [TypesComponent, AbilitiesComponent, StatsComponent, MovesComponent],
+  imports: [TypesComponent, AbilitiesComponent, StatsComponent, MovesComponent, EvolutionsComponent],
   templateUrl: './pokemon-detail.component.html',
   styleUrl: './pokemon-detail.component.css',
   animations: [
@@ -30,6 +31,7 @@ export class PokemonDetailComponent implements OnInit {
   pokemon: Pokemon | undefined = undefined;
   errorMessage: string | null = null;
   pokeID: number = 0;
+  pokeName: string = "";
   pokeColor: string = "grey";
 
   constructor(private pokemonService: PokemonService) {}
@@ -48,6 +50,7 @@ export class PokemonDetailComponent implements OnInit {
           this.pokemon = data;
           if (data) {
             this.pokeID = data?.ID;
+            this.pokeName = data?.name;
             this.pokeColor = data.color;
           } 
         },
@@ -61,6 +64,8 @@ export class PokemonDetailComponent implements OnInit {
   onClose() {
     this.close.emit();
     this.pokemon = undefined;
+    this.pokeID = 0;
+    this.pokeName = "";
   }
 
   colorStyles(style: string, color: string) {
