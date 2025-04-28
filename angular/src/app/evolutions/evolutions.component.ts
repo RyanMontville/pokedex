@@ -12,6 +12,8 @@ export class EvolutionsComponent implements OnInit {
   @Input() pokemonName!: string;
   evolutions: Evolution[] | undefined = [];
   hasThirdEvolution: boolean = false;
+  errorMessage: string | null = null;
+  error: boolean = false;
 
   constructor(private evolutionService: EvolutionsService) {}
 
@@ -20,14 +22,18 @@ export class EvolutionsComponent implements OnInit {
       next: (data) => {
         this.evolutions = data;
         if (this.evolutions !== undefined) {
-          if (this.evolutions[0].third) {
+          if (this.evolutions[0].third !== 'none') {
             this.hasThirdEvolution = true;
           }
+        } else {
+          this.errorMessage = "Evolution is undefined";
+          this.error = true;
         }
-        
       },
       error: (error) => {
         console.error(error);
+        this.errorMessage = error;
+        this.error = true;
       }
     })
   }

@@ -53,7 +53,7 @@ export class EvolutionsService {
     if (this.evolutionDataCache) {
       return new Observable(observer => {
         observer.next(this.evolutionDataCache?.filter((pokemon) => {
-          return name === pokemon.first || name === pokemon.second || name === pokemon.third;
+          return name.toLowerCase() === pokemon.first.toLowerCase() || name.toLowerCase() === pokemon.second.toLowerCase() || name.toLowerCase() === pokemon.third.toLowerCase();
         }));
         observer.complete();
       });
