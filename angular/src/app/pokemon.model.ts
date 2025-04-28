@@ -49,3 +49,11 @@ export class Move {
         public accuracy: number
     ) {}
 }
+
+export class Evolution {
+    constructor(
+        public first: string,
+        public second: string,
+        public third: string
+    ) {}
+}
