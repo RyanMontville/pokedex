@@ -89,6 +89,20 @@ export class PokemonService {
     }
   }
 
+  getPokemonImageByName(name: string): Observable<string | undefined> {
+    if (this.pokemonDataCache) {
+      return new Observable(observer => {
+        const foundPokemon = this.pokemonDataCache?.find(pokemon => pokemon.name.toLowerCase() === name.toLowerCase());
+        observer.next(foundPokemon?.image);
+        observer.complete();
+      });
+    } else {
+      return this.getPokemonDataFromCsv(this.pokemonCSV).pipe(
+        map(pokemonList => pokemonList.find(pokemon => pokemon.name.toLowerCase() === name.toLowerCase())?.image)
+      );
+    }
+  }
+
   getAllPokemon(): Observable<Pokemon[]> {
     if (this.pokemonDataCache) {
       return new Observable(observer => {

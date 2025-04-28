@@ -2,12 +2,17 @@
 @if (!error) {
     @if (hasThirdEvolution) {
         @for (evolution of evolutions; track $index) {
+            <app-evo-image [pokemonName]="evolution.first" />
+            <app-evo-image [pokemonName]="evolution.second" />
+            <app-evo-image [pokemonName]="evolution.third" />
             <p>{{evolution.first}} > {{evolution.second}} > {{evolution.third}}</p>
         }
     }
     
     @if (!hasThirdEvolution) {
         @for (evolution of evolutions; track $index) {
+            <app-evo-image [pokemonName]="evolution.first" />
+            <app-evo-image [pokemonName]="evolution.second" />
             <p>{{evolution.first}} > {{evolution.second}}</p>
         }
     }

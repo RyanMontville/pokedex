@@ -1,10 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Evolution } from '../pokemon.model';
 import { EvolutionsService } from './evolutions.service';
+import { PokemonService } from '../home/pokemon.service';
+import { EvoImageComponent } from "./evo-image/evo-image.component";
 
 @Component({
   selector: 'app-evolutions',
-  imports: [],
+  imports: [EvoImageComponent],
   templateUrl: './evolutions.component.html',
   styleUrl: './evolutions.component.css'
 })
@@ -15,7 +17,8 @@ export class EvolutionsComponent implements OnInit {
   errorMessage: string | null = null;
   error: boolean = false;
 
-  constructor(private evolutionService: EvolutionsService) {}
+  constructor(
+    private evolutionService: EvolutionsService) {}
 
   ngOnInit(): void {
     this.evolutionService.getEvolutionsForPokemonName(this.pokemonName).subscribe({
