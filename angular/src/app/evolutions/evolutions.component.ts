@@ -16,6 +16,7 @@ export class EvolutionsComponent implements OnInit {
   hasThirdEvolution: boolean = false;
   errorMessage: string | null = null;
   error: boolean = false;
+  numEvolutions: number = 0;
 
   constructor(
     private evolutionService: EvolutionsService) {}
@@ -25,6 +26,7 @@ export class EvolutionsComponent implements OnInit {
       next: (data) => {
         this.evolutions = data;
         if (this.evolutions !== undefined) {
+          this.numEvolutions = this.evolutions.length;
           if (this.evolutions[0].third !== 'none') {
             this.hasThirdEvolution = true;
           }

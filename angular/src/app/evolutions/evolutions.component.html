@@ -1,19 +1,46 @@
 <p>{{errorMessage}}</p>
+<h2>Evolution{{numEvolutions > 1 ? 's': ''}}</h2>
 @if (!error) {
     @if (hasThirdEvolution) {
         @for (evolution of evolutions; track $index) {
-            <app-evo-image [pokemonName]="evolution.first" />
-            <app-evo-image [pokemonName]="evolution.second" />
-            <app-evo-image [pokemonName]="evolution.third" />
-            <p>{{evolution.first}} > {{evolution.second}} > {{evolution.third}}</p>
+            <div class="chain">
+                <div class="evolution">
+                    <app-evo-image [pokemonName]="evolution.first" />
+                    <span>{{evolution.first}}</span>
+                </div>
+                <span class="material-symbols-outlined">
+                    arrow_forward
+                    </span>
+                <div class="evolution">
+                    <app-evo-image [pokemonName]="evolution.second" />
+                    <span>{{evolution.second}}</span>
+                </div>
+                <span class="material-symbols-outlined">
+                    arrow_forward
+                    </span>
+                <div class="evolution">
+                    <app-evo-image [pokemonName]="evolution.third" />
+                    <span>{{evolution.third}}</span>
+                </div>
+            </div>
         }
     }
     
     @if (!hasThirdEvolution) {
         @for (evolution of evolutions; track $index) {
-            <app-evo-image [pokemonName]="evolution.first" />
-            <app-evo-image [pokemonName]="evolution.second" />
-            <p>{{evolution.first}} > {{evolution.second}}</p>
+            <div class="chain">
+                <div class="evolution">
+                    <app-evo-image [pokemonName]="evolution.first" />
+                    <span>{{evolution.first}}</span>
+                </div>
+                <span class="material-symbols-outlined">
+                    arrow_forward
+                    </span>
+                <div class="evolution">
+                    <app-evo-image [pokemonName]="evolution.second" />
+                    <span>{{evolution.second}}</span>
+                </div>
+            </div>
         }
     }
 }
