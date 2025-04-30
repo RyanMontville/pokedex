@@ -43,6 +43,8 @@ export class HomeComponent implements OnInit {
   currentPage: number = 1;
   searchTerm: string = "";
   message: string = "";
+  showAdvancedSearch: boolean = false;
+  showingAdvancedResults: boolean = false;
 
   constructor(
     private pokemonService: PokemonService,
@@ -111,14 +113,14 @@ export class HomeComponent implements OnInit {
     this.currentPage += 1;
     this.currentStart += 100;
     this.currentEnd += 100;
-    this.currentPokemon = this.pokemonList.slice(this.currentStart, this.currentEnd);
+    this.currentPokemon = this.listToShow.slice(this.currentStart, this.currentEnd);
   }
 
   previousPage() {
     this.currentPage -= 1;
     this.currentStart -= 100;
     this.currentEnd -= 100;
-    this.currentPokemon = this.pokemonList.slice(this.currentStart, this.currentEnd);
+    this.currentPokemon = this.listToShow.slice(this.currentStart, this.currentEnd);
   }
   goToPage(pageNumber: number) {
     this.currentPage = pageNumber;
@@ -126,7 +128,7 @@ export class HomeComponent implements OnInit {
     let start = end - 100
     this.currentStart = start;
     this.currentEnd = end
-    this.currentPokemon = this.pokemonList.slice(this.currentStart, this.currentEnd);
+    this.currentPokemon = this.listToShow.slice(this.currentStart, this.currentEnd);
   }
 
   calculatePages() {
@@ -138,6 +140,10 @@ export class HomeComponent implements OnInit {
     for (let i=1; i<numPages+1; i++) {
       this.pages.push(i);
     }
+    this.currentStart = 0;
+    this.currentEnd = 100;
+    this.currentPage = 1;
+    this.currentPokemon = this.listToShow.slice(this.currentStart, this.currentEnd);
   }
 
   filterResults(text: string) {
@@ -157,12 +163,41 @@ export class HomeComponent implements OnInit {
       this.searchTerm = "";
     }
   }
+
+  filterForHabitat(habitat: string) {
+    this.showingAdvancedResults = true;
+    this.listToShow = this.listToShow.filter((pokemon) => pokemon.habitat.toLowerCase() === habitat.toLowerCase());
+    this.calculatePages();
+    this.showFiltered = true;
+    this.showAdvancedSearch = false;
+    if (this.searchTerm.length > 0) {
+      this.message = `Showing ${this.listToShow.length} results for ${this.searchTerm} and habitat: ${habitat}`;
+    } else {
+      this.message = `Showing ${this.listToShow.length} results for habitat: ${habitat}`;
+    }
+  }
+
+  filterForGeneration(generation: string) {
+    this.showingAdvancedResults = true;
+    this.showAdvancedSearch = false;
+    this.listToShow = this.listToShow.filter((pokemon) => pokemon.generation === generation);
+    this.calculatePages();
+    this.showFiltered = true;
+    if (this.searchTerm.length > 0) {
+      this.message = `Showing ${this.listToShow.length} results for ${this.searchTerm} and generation: ${generation}`;
+    } else {
+      this.message = `Showing ${this.listToShow.length} results for generation: ${generation}`;
+    }
+  }
+
   clear() {
     this.searchTerm = "";
     this.listToShow = this.pokemonList;
     this.showFiltered = false;
     this.message = `Showing ${this.pokemonList.length} Pokemon`;
     this.errorMessage = null;
+    this.showAdvancedSearch = false;
+    this.showingAdvancedResults = false;
     this.calculatePages();
   }
 
