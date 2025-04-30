@@ -1,58 +1,84 @@
 <main>
     <div class="searchBar">
-            <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." #searchBar />
+        <input type="text" [(ngModel)]="searchTerm" [placeholder]="searchPlaceholder" #searchBar
+            (keydown.enter)="filterResults(searchBar.value)" />
         <button type="button" (click)="filterResults(searchBar.value)">Search</button>
         @if (!showAdvancedSearch && !showingAdvancedResults) {
-            <button type="button" (click)="showAdvancedSearch = true">Advanced Search</button>
+        <button type="button" (click)="showAdvancedSearch = true">Advanced Search</button>
         }
         @if (showFiltered) {
-            <button (click)="clear()">Clear Search Resuts</button>
+        <button (click)="clear()">Clear Search Resuts</button>
         }
     </div>
     @if (showAdvancedSearch) {
-        Filter by Habitat:
-        <div class="advancedButtonGroup">
-            <button (click)="filterForHabitat('cave')">cave</button>
-            <button (click)="filterForHabitat('forest')">forest</button>
-            <button (click)="filterForHabitat('grassland')">grassland</button>
-            <button (click)="filterForHabitat('mountain')">mountain</button>
-            <button (click)="filterForHabitat('rare')">rare</button>
-            <button (click)="filterForHabitat('rough-terrain')">rough-terrain</button>
-            <button (click)="filterForHabitat('sea')">sea</button>
-            <button (click)="filterForHabitat('urban')">urban</button>
-            <button (click)="filterForHabitat('waters-edge')">waters-edge</button>
-        </div>
-        Filter by Generation:
-        <div class="advancedButtonGroup">
-            <button (click)="filterForGeneration('1')">1</button>
-            <button (click)="filterForGeneration('2')">2</button>
-            <button (click)="filterForGeneration('3')">3</button>
-            <button (click)="filterForGeneration('4')">4</button>
-            <button (click)="filterForGeneration('5')">5</button>
-            <button (click)="filterForGeneration('6')">6</button>
-            <button (click)="filterForGeneration('7')">7</button>
-            <button (click)="filterForGeneration('8')">8</button>
-            <button (click)="filterForGeneration('9')">9</button>
-        </div>
+    <p class="filterLabel">Filter by Habitat:</p>
+    <div class="advancedButtonGroup">
+        <button (click)="filterForHabitat('cave')">cave</button>
+        <button (click)="filterForHabitat('forest')">forest</button>
+        <button (click)="filterForHabitat('grassland')">grassland</button>
+        <button (click)="filterForHabitat('mountain')">mountain</button>
+        <button (click)="filterForHabitat('rare')">rare</button>
+        <button (click)="filterForHabitat('rough-terrain')">rough-terrain</button>
+        <button (click)="filterForHabitat('sea')">sea</button>
+        <button (click)="filterForHabitat('urban')">urban</button>
+        <button (click)="filterForHabitat('waters-edge')">waters-edge</button>
+    </div>
+    <p class="filterLabel">Filter by Generation:</p>
+    <div class="advancedButtonGroup">
+        <button (click)="filterForGeneration('1')">1</button>
+        <button (click)="filterForGeneration('2')">2</button>
+        <button (click)="filterForGeneration('3')">3</button>
+        <button (click)="filterForGeneration('4')">4</button>
+        <button (click)="filterForGeneration('5')">5</button>
+        <button (click)="filterForGeneration('6')">6</button>
+        <button (click)="filterForGeneration('7')">7</button>
+        <button (click)="filterForGeneration('8')">8</button>
+        <button (click)="filterForGeneration('9')">9</button>
+    </div>
+    <!-- <p class="filterLabel">Filter by Type:</p>
+    <div class="advancedButtonGroup">
+        <button (click)="filterByType('normal')">normal</button>
+        <button (click)="filterByType('fighting')">fighting</button>
+        <button (click)="filterByType('flying')">flying</button>
+        <button (click)="filterByType('ground')">ground</button>
+        <button (click)="filterByType('rock')">rock</button>
+        <button (click)="filterByType('bug')">bug</button>
+        <button (click)="filterByType('ghost')">ghost</button>
+        <button (click)="filterByType('steel')">steel</button>
+        <button (click)="filterByType('fire')">fire</button>
+        <button (click)="filterByType('water')">water</button>
+        <button (click)="filterByType('grass')">grass</button>
+        <button (click)="filterByType('electric')">electric</button>
+        <button (click)="filterByType('psychic')">psychic</button>
+        <button (click)="filterByType('ice')">ice</button>
+        <button (click)="filterByType('dragon')">dragon</button>
+        <button (click)="filterByType('dark')">dark</button>
+        <button (click)="filterByType('fairy')">fairy</button>
+        <button (click)="filterByType('stellar')">stellar</button>
+        <button (click)="filterByType('unknown')">unknown</button>
+        <button (click)="filterByType('text')">Text</button>
+        <button (click)="filterByType('shadow')">shadow</button>
+
+    </div> -->
     }
     @if (!errorMessage) {
-        <p class="message">{{message}}</p>
+    <p class="message">{{message}}</p>
     }
     @if(errorMessage) {
     <div class="errorMessage" (click)="errorMessage = ''"><span class="material-symbols-outlined">
             error
         </span>{{errorMessage}}</div>
     }
-        <nav>
-            @if (currentStart > 0) {
-            <button (click)="previousPage()">Previous</button>
+    <nav>
+        @if (currentStart > 0) {
+        <button (click)="previousPage()">Previous</button>
+        }
+        @for (page of pages; track $index) {
+        <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
+        }
+        @if (currentEnd < 1400 && pages.length> 1) { <button (click)="nextPage()">Next</button>
             }
-            @for (page of pages; track $index) {
-            <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
-            }
-            @if (currentEnd < 1400 && pages.length > 1) { <button (click)="nextPage()">Next</button>
-                }
-        </nav>
+    </nav>
     <div id="pokemonList">
         @for (pokemon of currentPokemon; track $index) {
         <div class="pokemon" [style.backgroundColor]="pokemon.color" [style.color]="colorStyles('text', pokemon.color)"
@@ -69,7 +95,7 @@
         @for (page of pages; track $index) {
         <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
         }
-        @if (currentEnd < 1400 && pages.length > 1) { <button (click)="nextPage()">Next</button>
+        @if (currentEnd < 1400 && pages.length> 1) { <button (click)="nextPage()">Next</button>
             }
     </nav>
 

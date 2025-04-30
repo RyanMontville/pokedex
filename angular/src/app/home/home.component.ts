@@ -45,10 +45,12 @@ export class HomeComponent implements OnInit {
   message: string = "";
   showAdvancedSearch: boolean = false;
   showingAdvancedResults: boolean = false;
+  searchPlaceholder: string = "Search all Pokemon...";
+  advancedTerm: string | null = null;
 
   constructor(
     private pokemonService: PokemonService,
-    private router: Router) {}
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loadPokemonData();
@@ -137,7 +139,7 @@ export class HomeComponent implements OnInit {
     console.log(`Length of list: ${listLenght}`);
     let numPages = Math.ceil(listLenght / 100);
     console.log(`number of pages: ${numPages}`);
-    for (let i=1; i<numPages+1; i++) {
+    for (let i = 1; i < numPages + 1; i++) {
       this.pages.push(i);
     }
     this.currentStart = 0;
@@ -148,19 +150,43 @@ export class HomeComponent implements OnInit {
 
   filterResults(text: string) {
     this.errorMessage = "";
+    let lastWord = this.message.split(" ");
     if (!text) {
+      if (lastWord[lastWord.length - 1] === "Pokemon") {
+        this.showFiltered = false;
+      }
       this.errorMessage = "Please enter a pokemon to search"
       setTimeout(() => {
         this.errorMessage = "";
       }, 1000);
-    }
-    this.listToShow = this.pokemonList.filter((pokemon) => pokemon.name.toLowerCase().includes(text.toLowerCase()));
-    this.calculatePages();
-    this.message = `Showing ${this.listToShow.length} results for ${text}`;
-    this.showFiltered = true;
-    if (this.listToShow.length === 0) {
-      this.errorMessage = `No Pokemon matching '${text}'`;
-      this.searchTerm = "";
+    } else {
+      let checkLengthList = this.listToShow.filter((pokemon) => pokemon.name.toLowerCase().includes(text.toLowerCase()));
+      if (checkLengthList.length === 0) {
+        if (this.advancedTerm) {
+          this.errorMessage = `No Pokemon matching '${text}' and ${this.advancedTerm}`;
+        } else {
+          this.errorMessage = `No Pokemon matching '${text}'`;
+        }
+        
+        this.searchTerm = "";
+        if (lastWord[lastWord.length - 1] === "Pokemon") {
+          this.showFiltered = false;
+        }
+        this.showAdvancedSearch = false;
+        this.showingAdvancedResults = false;
+        setTimeout(() => {
+          this.errorMessage = null;
+        }, 2000);
+      } else {
+        this.listToShow = checkLengthList;
+        this.calculatePages();
+        if (this.advancedTerm) {
+          this.message = `Showing ${this.listToShow.length} results for ${text} and ${this.advancedTerm}`;
+        } else {
+          this.message = `Showing ${this.listToShow.length} results for ${text}`;
+        }
+        this.showFiltered = true;
+      }
     }
   }
 
@@ -170,6 +196,8 @@ export class HomeComponent implements OnInit {
     this.calculatePages();
     this.showFiltered = true;
     this.showAdvancedSearch = false;
+    this.advancedTerm = `habitat: ${habitat}`;
+    this.searchPlaceholder = `Search Pokemon with ${this.advancedTerm}...`;
     if (this.searchTerm.length > 0) {
       this.message = `Showing ${this.listToShow.length} results for ${this.searchTerm} and habitat: ${habitat}`;
     } else {
@@ -182,6 +210,8 @@ export class HomeComponent implements OnInit {
     this.showAdvancedSearch = false;
     this.listToShow = this.listToShow.filter((pokemon) => pokemon.generation === generation);
     this.calculatePages();
+    this.advancedTerm = `generation ${generation}`
+    this.searchPlaceholder = `Search Pokemon in ${this.advancedTerm}...`;
     this.showFiltered = true;
     if (this.searchTerm.length > 0) {
       this.message = `Showing ${this.listToShow.length} results for ${this.searchTerm} and generation: ${generation}`;
@@ -189,6 +219,12 @@ export class HomeComponent implements OnInit {
       this.message = `Showing ${this.listToShow.length} results for generation: ${generation}`;
     }
   }
+
+  // filterByType(type: string) {
+  //   this.showingAdvancedResults = true;
+  //   this.showAdvancedSearch = false;
+  //   this.listToShow = this.listToShow.filter((pokemon) => pokemon.t)
+  // }
 
   clear() {
     this.searchTerm = "";
@@ -199,6 +235,8 @@ export class HomeComponent implements OnInit {
     this.showAdvancedSearch = false;
     this.showingAdvancedResults = false;
     this.calculatePages();
+    this.advancedTerm = null;
+    this.searchPlaceholder = "Search all Pokemon..."
   }
 
 }

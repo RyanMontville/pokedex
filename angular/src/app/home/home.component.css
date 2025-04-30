@@ -55,3 +55,15 @@ nav {
     position: relative;
     overflow: scroll;
 }
+.advancedButtonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: 10px auto;
+}
+
+.filterLabel {
+    text-align: center;
+}
