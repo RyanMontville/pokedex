@@ -1,29 +1,31 @@
 <main>
     <div class="searchBar">
-        <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." #searchBar />
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." #searchBar />
         <button type="button" (click)="filterResults(searchBar.value)">Search</button>
         @if (showFiltered) {
             <button (click)="clear()">Clear Search Resuts</button>
         }
     </div>
+    @if (!errorMessage) {
+        <p class="message">{{message}}</p>
+    }
     @if(errorMessage) {
     <div class="errorMessage" (click)="errorMessage = ''"><span class="material-symbols-outlined">
             error
         </span>{{errorMessage}}</div>
     }
-    @if (!showFiltered) {
-    <nav>
-        @if (currentStart > 0) {
-        <button (click)="previousPage()">Previous</button>
-        }
-        @for (page of pages; track $index) {
-        <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
-        }
-        @if (currentEnd < 1400) { <button (click)="nextPage()">Next</button>
+        <nav>
+            @if (currentStart > 0) {
+            <button (click)="previousPage()">Previous</button>
             }
-    </nav>
+            @for (page of pages; track $index) {
+            <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
+            }
+            @if (currentEnd < 1400 && pages.length > 1) { <button (click)="nextPage()">Next</button>
+                }
+        </nav>
     <div id="pokemonList">
-        @for (pokemon of currentPokemon; track $index) {
+        @for (pokemon of listToShow; track $index) {
         <div class="pokemon" [style.backgroundColor]="pokemon.color" [style.color]="colorStyles('text', pokemon.color)"
             (click)="showPokemonDetail(pokemon.name)">
             <img [src]="pokemon.image" [alt]="pokemon.name" />
@@ -38,21 +40,9 @@
         @for (page of pages; track $index) {
         <button (click)="goToPage(page)" [class.active]="currentPage === page">{{page}}</button>
         }
-        @if (currentEnd < 1400) { <button (click)="nextPage()">Next</button>
+        @if (currentEnd < 1400 && pages.length > 1) { <button (click)="nextPage()">Next</button>
             }
     </nav>
-    }
-    @if (showFiltered) {
-    <div id="pokemonList">
-        @for (pokemon of filteredPokemonList; track $index) {
-        <div class="pokemon" [style.backgroundColor]="pokemon.color" [style.color]="colorStyles('text', pokemon.color)"
-            (click)="showPokemonDetail(pokemon.name)">
-            <img [src]="pokemon.image" [alt]="pokemon.name" />
-            <p class="name">{{pokemon.ID}}: {{pokemon.name}}</p>
-        </div>
-        }
-    </div>
-    }
 
 </main>
 @if (shouldShowDetail) {

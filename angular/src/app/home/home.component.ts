@@ -29,8 +29,8 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class HomeComponent implements OnInit {
-  pokemonList: Pokemon[] = [];
-  filteredPokemonList: Pokemon[] = [];
+  pokemonList: Pokemon[] = []; //All pokemon, do not change
+  listToShow: Pokemon[] = [];
   showFiltered: boolean = false;
   currentStart: number = 0;
   currentEnd: number = 100;
@@ -39,9 +39,10 @@ export class HomeComponent implements OnInit {
   shouldShowDetail: boolean = false;
   pokemonDetailState: string = 'out';
   pokemonToShowDetail: string = "";
-  pages: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  pages: number[] = [];
   currentPage: number = 1;
   searchTerm: string = "";
+  message: string = "";
 
   constructor(
     private pokemonService: PokemonService,
@@ -56,7 +57,10 @@ export class HomeComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.pokemonList = data;
-          this.currentPokemon = this.pokemonList.slice(this.currentStart, this.currentEnd);
+          this.listToShow = data;
+          this.calculatePages();
+          this.currentPokemon = this.listToShow.slice(this.currentStart, this.currentEnd);
+          this.message = `Showing ${this.pokemonList.length} Pokemon`;
         },
         error: (error) => {
           this.errorMessage = 'Error loading pokemon data: ' + error;
@@ -125,6 +129,17 @@ export class HomeComponent implements OnInit {
     this.currentPokemon = this.pokemonList.slice(this.currentStart, this.currentEnd);
   }
 
+  calculatePages() {
+    this.pages = [];
+    let listLenght = this.listToShow.length;
+    console.log(`Length of list: ${listLenght}`);
+    let numPages = Math.ceil(listLenght / 100);
+    console.log(`number of pages: ${numPages}`);
+    for (let i=1; i<numPages+1; i++) {
+      this.pages.push(i);
+    }
+  }
+
   filterResults(text: string) {
     this.errorMessage = "";
     if (!text) {
@@ -133,19 +148,22 @@ export class HomeComponent implements OnInit {
         this.errorMessage = "";
       }, 1000);
     }
-    this.filteredPokemonList = this.pokemonList.filter((pokemon) => pokemon.name.toLowerCase().includes(text.toLowerCase()));
-    if (this.filteredPokemonList.length === 0) {
+    this.listToShow = this.pokemonList.filter((pokemon) => pokemon.name.toLowerCase().includes(text.toLowerCase()));
+    this.calculatePages();
+    this.message = `Showing ${this.listToShow.length} results for ${text}`;
+    this.showFiltered = true;
+    if (this.listToShow.length === 0) {
       this.errorMessage = `No Pokemon matching '${text}'`;
-      this.showFiltered = false;
       this.searchTerm = "";
-    } else {
-      this.showFiltered = true;
     }
   }
   clear() {
-    this.showFiltered = false;
     this.searchTerm = "";
-    this.filteredPokemonList = [];
+    this.listToShow = this.pokemonList;
+    this.showFiltered = false;
+    this.message = `Showing ${this.pokemonList.length} Pokemon`;
+    this.errorMessage = null;
+    this.calculatePages();
   }
 
 }
